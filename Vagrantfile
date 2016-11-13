@@ -19,6 +19,15 @@ Vagrant.configure("2") do |config|
     url_wpcli = "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
     url_bedrock = "https://github.com/roots/bedrock.git"
 
+    db_name = "scotchbox"
+    db_user = "root"
+    db_password = "root"
+    db_host = "127.0.0.1"
+
+    wp_admin_user = "admin"
+    wp_admin_password = "admin"
+    wp_admin_email = "#{wp_admin_user}@#{name_realhost}"
+
     config.vm.network "private_network", ip: "#{ip}"
     config.vm.hostname = hostname
     config.vm.box = "scotch/box"
@@ -40,8 +49,8 @@ Vagrant.configure("2") do |config|
         sudo sed -i "s!#ServerName www.example.com!ServerName #{name_realhost}!g" #{path_apache_conf}/#{name_conf}
         sudo a2ensite #{name_realhost}
         sudo service apache2 reload
-        printf "DB_NAME=scotchbox\nDB_USER=root\nDB_PASSWORD=root\nDB_HOST=127.0.0.1\nWP_ENV=development\nWP_HOME=http://#{name_realhost}\nWP_SITEURL=http://#{name_realhost}/wp" > #{path_apache_www}/#{name_realhost}/.env
-        cd #{path_apache_www}/#{name_realhost}/web && wp core install --allow-root --url=http://#{name_realhost} --title=#{hostname} --admin_user=admin --admin_password=admin --admin_email=admin@#{name_realhost} --quiet
+        printf "DB_NAME=#{db_name}\nDB_USER=#{db_user}\nDB_PASSWORD=#{db_password}\nDB_HOST=#{db_host}\nWP_ENV=development\nWP_HOME=http://#{name_realhost}\nWP_SITEURL=http://#{name_realhost}/wp" > #{path_apache_www}/#{name_realhost}/.env
+        cd #{path_apache_www}/#{name_realhost}/web && wp core install --allow-root --url=http://#{name_realhost} --title=#{hostname} --admin_user=#{wp_admin_user} --admin_password=#{wp_admin_password} --admin_email=#{wp_admin_email} --quiet
         cd #{path_apache_www}/ && git add #{name_realhost} && git remote remove origin
     SHELL
 
