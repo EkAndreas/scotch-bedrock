@@ -36,8 +36,8 @@ Vagrant.configure("2") do |config|
         rm -Rf #{path_apache_www}/#{name_realhost}/.git
         cd #{path_apache_www}/#{name_realhost} && composer update --prefer-dist
         sudo cp #{path_apache_conf}/000-default.conf #{path_apache_conf}/#{name_conf}
-        sudo sed -i "s/public/#{name_realhost}\\/web/g" #{path_apache_conf}/#{name_conf}
-        sudo sed -i "s/#ServerName www.example.com/ServerName #{name_realhost}/g" #{path_apache_conf}/#{name_conf}
+        sudo sed -i "s!public!#{name_realhost}/web!g" #{path_apache_conf}/#{name_conf}
+        sudo sed -i "s!#ServerName www.example.com!ServerName #{name_realhost}!g" #{path_apache_conf}/#{name_conf}
         sudo a2ensite #{name_realhost}
         sudo service apache2 reload
         printf "DB_NAME=scotchbox\nDB_USER=root\nDB_PASSWORD=root\nDB_HOST=127.0.0.1\nWP_ENV=development\nWP_HOME=http://#{name_realhost}\nWP_SITEURL=http://#{name_realhost}/wp" > #{path_apache_www}/#{name_realhost}/.env
