@@ -21,7 +21,9 @@ Vagrant.configure("2") do |config|
     path_apache_conf = "/etc/apache2/sites-available"
     # Path to docroot - relative to apache vhosts root
     path_rel_docroot = "#{name_realhost}/#{name_docroot}"
-    # Path to docroot - absolute; do not edit this
+    # Path (absolute) to composer cache dir in guest
+    # Must be within apache vhosts root to be effective between guest creations
+    path_composer_cache = "#{path_apache_www}/.composer-cache"
 
     url_wpcli = "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
     url_bedrock = "https://github.com/roots/bedrock.git"
@@ -58,6 +60,7 @@ Vagrant.configure("2") do |config|
         rm -Rf #{path_apache_www}/#{name_realhost}/.git
 
         echo "Downloading dependencies"
+        export COMPOSER_CACHE_DIR="#{path_composer_cache}"
         cd #{path_apache_www}/#{name_realhost} && composer update --prefer-dist
 
         echo "Creating new virtual host with config based on default:"
