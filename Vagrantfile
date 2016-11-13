@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
         cd /tmp && sudo wget -q #{url_wpcli} && sudo chmod +x /tmp/wp-cli.phar && sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
         cd #{path_apache_www} && git clone #{url_bedrock} #{name_realhost}
         rm -Rf #{path_apache_www}/#{name_realhost}/.git
-        cd #{path_apache_www}/#{name_realhost} && composer update
+        cd #{path_apache_www}/#{name_realhost} && composer update --prefer-dist
         sudo cp #{path_apache_conf}/000-default.conf #{path_apache_conf}/#{name_conf}
         sudo sed -i "s/public/#{name_realhost}\\/web/g" #{path_apache_conf}/#{name_conf}
         sudo sed -i "s/#ServerName www.example.com/ServerName #{name_realhost}/g" #{path_apache_conf}/#{name_conf}
